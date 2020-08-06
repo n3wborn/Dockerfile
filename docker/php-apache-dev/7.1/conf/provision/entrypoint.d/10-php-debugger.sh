@@ -17,14 +17,17 @@ PHP_CONF_PATHS="
 /etc/php/7.1/mods-available
 /etc/php/7.2/mods-available
 /etc/php/7.3/mods-available
+/etc/php/7.4/mods-available
 /etc/php/7.0/cli/conf.d
 /etc/php/7.1/cli/conf.d
 /etc/php/7.2/cli/conf.d
 /etc/php/7.3/cli/conf.d
+/etc/php/7.4/cli/conf.d
 /etc/php/7.0/fpm/conf.d
 /etc/php/7.1/fpm/conf.d
 /etc/php/7.2/fpm/conf.d
 /etc/php/7.3/fpm/conf.d
+/etc/php/7.4/fpm/conf.d
 /usr/local/etc/php/conf.d/"
 
 function phpModuleRemove() {
@@ -90,6 +93,8 @@ phpEnvironmentVariable "xdebug.remote_connect_back" "XDEBUG_REMOTE_CONNECT_BACK"
 phpEnvironmentVariable "xdebug.remote_autostart"    "XDEBUG_REMOTE_AUTOSTART"
 phpEnvironmentVariable "xdebug.remote_host"         "XDEBUG_REMOTE_HOST"
 phpEnvironmentVariable "xdebug.remote_port"         "XDEBUG_REMOTE_PORT"
+phpEnvironmentVariable "xdebug.max_nesting_level"   "XDEBUG_MAX_NESTING_LEVEL"
+phpEnvironmentVariable "xdebug.idekey"              "XDEBUG_IDE_KEY"
 
 # profiler
 phpEnvironmentVariable "xdebug.profiler_enable"               "XDEBUG_PROFILER_ENABLE"

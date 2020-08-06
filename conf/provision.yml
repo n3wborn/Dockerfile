@@ -47,11 +47,12 @@ provision:
       apache/centos     : centos-*
       apache/alpine     : alpine
       php-apache/general: '*'
+      php-apache/alpine : '*-alpine'
   php-nginx:
     configuration:
       nginx/general     : '*'
       nginx/centos      : centos-*
-      nginx/alpine      : alpine
+      nginx/alpine      : '*-alpine'
       php-nginx/general : '*'
   php-dev:
     configuration:
@@ -69,10 +70,11 @@ provision:
       nginx-dev/general : '*'
   php-official:
     configuration:
-      base/general     : '*'
-      base-app/general : '*'
-      php/general      : '*'
-      php/official     : '*'
+      base/general       : '*'
+      base-app/general   : '*'
+      php/general        : '*'
+      php/official       : '*'
+      php/official-alpine: '*-alpine'
   postfix:
     configuration:
       postfix/general   : '*'

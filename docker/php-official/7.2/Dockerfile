@@ -27,7 +27,7 @@ RUN mkdir -p \
     && "/baselayout/sbin/gosu" nobody true
 
 
-FROM php:7.2-fpm-stretch
+FROM php:7.2-fpm-buster
 
 LABEL maintainer=info@webdevops.io \
       vendor=WebDevOps.io \
@@ -115,8 +115,9 @@ RUN set -x \
         apngopt \
         pngnq \
         pngquant \
-        libvips42 \
         # Libraries
+        libvips42 \
+        librabbitmq4 \
         libldap-2.4-2 \
         libxslt1.1 \
         zlibc \
@@ -125,9 +126,10 @@ RUN set -x \
         libpng16-16 \
         libmcrypt4 \
         libzip4 \
-        libjpeg62-turbo-dev \
-        libfreetype6-dev \
         # Dev and headers
+        libjpeg62-turbo-dev \
+        libwebp-dev \
+        libfreetype6-dev \
         libbz2-dev \
         libicu-dev \
         libldap2-dev \
@@ -141,28 +143,35 @@ RUN set -x \
         libpq-dev \
         libzip-dev \
         libc-client-dev \
+        libc-client2007e-dev \
         libkrb5-dev \
         libvips-dev \
+        librabbitmq-dev \
+        libmagick++-dev \
     # Install guetzli
     && wget https://github.com/google/guetzli/archive/master.zip \
     && unzip master.zip \
     && make -C guetzli-master \
     && cp guetzli-master/bin/Release/guetzli /usr/local/bin/ \
     && rm -rf master.zip guetzli-master \
+    # Install new version of ICU
+    && curl -sS -o /tmp/icu.tar.gz -L https://github.com/unicode-org/icu/releases/download/release-66-1/icu4c-66_1-src.tgz \
+    && tar -zxf /tmp/icu.tar.gz -C /tmp && cd /tmp/icu/source && ./configure --prefix=/usr/local && make && make install && cd / && rm -rf /tmp/icu* \
     # Install extensions
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure intl --with-icu-dir=/usr/local \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-webp-dir=/usr/include/ \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
-    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install \
         bcmath \
         bz2 \
         calendar \
         exif \
         intl \
-        imap \
         gettext \
         ldap \
         mysqli \
+        imap \
         hash \
         pcntl \
         pdo_mysql \
@@ -190,9 +199,13 @@ RUN set -x \
     && echo extension=vips.so > /usr/local/etc/php/conf.d/vips.ini \
     && pecl install redis \
     && pecl install mongodb \
+    && pecl install imagick \
+    && pecl install amqp \
     && echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini \
     && echo extension=redis.so > /usr/local/etc/php/conf.d/redis.ini \
+    && echo extension=imagick.so > /usr/local/etc/php/conf.d/imagick.ini \
     && echo extension=mongodb.so > /usr/local/etc/php/conf.d/mongodb.ini \
+    && echo extension=amqp.so > /usr/local/etc/php/conf.d/amqp.ini \
     # Uninstall dev and header packages
     && apt-get purge -y -f --force-yes \
         libc-client-dev \
@@ -206,9 +219,12 @@ RUN set -x \
         libxslt1-dev \
         zlib1g-dev \
         libpng-dev \
+        libwebp-dev \
         libpq-dev \
         libzip-dev \
         libvips-dev \
+        librabbitmq-dev \
+        libmagick++-dev \
     && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
     # Enable php services

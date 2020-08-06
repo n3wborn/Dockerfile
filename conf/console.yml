@@ -47,10 +47,6 @@ dockerTest:
       ':alpine':
         OS_FAMILY: 'alpine'
         OS_VERSION: '3'
-      ':alpine-3':
-        PHP_APCU: '0'
-      ':alpine-php5':
-        PHP_APCU: '0'
       ':ubuntu-12.04':
         PHP_REDIS: '0'
         PHP_APCU: '0'
@@ -60,9 +56,21 @@ dockerTest:
       ':centos-7-php56':
         PHP_APCU: '0'
         PHP_REDIS: '0'
-      'php[^:]*:[0-9]':
+      'php[^:]*:7.[0-9]-alpine$':
+        OS_FAMILY: 'alpine'
+        OS_VERSION: '3'
+        PHP_OFFICIAL: '1'
+      'php[^:]*:5.6$':
         OS_FAMILY: 'debian'
         OS_VERSION: '9'
+        PHP_OFFICIAL: '1'
+      'php[^:]*:7.0$':
+        OS_FAMILY: 'debian'
+        OS_VERSION: '9'
+        PHP_OFFICIAL: '1'
+      'php[^:]*:[0-9]':
+        OS_FAMILY: 'debian'
+        OS_VERSION: '10'
         PHP_OFFICIAL: '1'
       '/liquibase':
         OS_FAMILY: 'alpine'
