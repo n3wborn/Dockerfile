@@ -10,6 +10,7 @@ ENV WEB_DOCUMENT_ROOT=/app \
     WEB_ALIAS_DOMAIN=*.vm \
     WEB_PHP_TIMEOUT=600 \
     WEB_PHP_SOCKET=""
+ENV COMPOSER_VERSION="2"
 
 COPY conf/ /opt/docker/
 
@@ -56,7 +57,9 @@ RUN set -x \
         php-amqp \
         php-memcached \
     && pecl channel-update pecl.php.net \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     # Enable php services
     && docker-service enable syslog \
     && docker-service enable cron \

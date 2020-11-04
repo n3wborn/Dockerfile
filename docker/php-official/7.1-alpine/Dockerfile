@@ -47,6 +47,7 @@ ENV APPLICATION_USER=application \
     APPLICATION_GID=1000
 ENV PHP_SENDMAIL_PATH="/usr/sbin/sendmail -t -i" 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so"
+ENV COMPOSER_VERSION="2"
 
 
 # Baselayout copy (from staged image)
@@ -196,10 +197,10 @@ RUN set -x \
         gettext \
         opcache \
     # Install extensions for PHP 7.x
-    && pecl install apcu \
     && printf "no --disable-memcached-sasl\n" | pecl install memcached-3.0.4 \
     && docker-php-ext-enable memcached \
     # Install vips (only works with PHP >= 7.0)
+    && pecl install apcu \
     && printf "\n" | pecl install vips \
     && pecl install redis \
     && pecl install mongodb \
@@ -242,7 +243,9 @@ RUN set -x \
         libmemcached-dev \
         yaml-dev \
     && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     # Enable php services
     && docker-service enable syslog \
     && docker-service enable cron \

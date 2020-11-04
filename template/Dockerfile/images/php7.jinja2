@@ -78,7 +78,9 @@
     # && pear channel-update pear.php.net \
     # && pear upgrade-all \
     && pear config-set auto_discover 1 \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     # PECL workaround, see webdevops/Dockerfile#78
     && sed -i "s/ -n / /" $(which pecl) \
     {{ services.php() }}
@@ -137,7 +139,9 @@
         php-mongodb \
         php-apcu \
         php-amqp \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     {{ services.php() }}
 {%- endmacro %}
 
@@ -185,7 +189,9 @@
         php-memcached \
         php-amqp \
     && pecl channel-update pecl.php.net \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     {{ services.php() }}
 {%- endmacro %}
 
@@ -231,7 +237,9 @@
         php-memcache \
         php-memcached \
     && pecl channel-update pecl.php.net \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     {{ services.php() }}
 {%- endmacro %}
 
@@ -284,7 +292,9 @@
 {%- endif %}
         php-memcached \
     && pecl channel-update pecl.php.net \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     {{ services.php() }}
 {%- endmacro %}
 
@@ -330,7 +340,9 @@
         php70w-pecl-imagick \
         php70w-pecl-mongodb \
     && pecl channel-update pecl.php.net \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     && pecl install redis \
     && echo "extension=redis.so" > /etc/php.d/redis.ini \
     && yum remove -y ImageMagick-devel php70w-devel gcc make \

@@ -47,6 +47,7 @@ ENV APPLICATION_USER=application \
     APPLICATION_GID=1000
 ENV PHP_SENDMAIL_PATH="/usr/sbin/sendmail -t -i" 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so"
+ENV COMPOSER_VERSION="2"
 
 
 # Baselayout copy (from staged image)
@@ -196,7 +197,6 @@ RUN set -x \
         gettext \
         opcache \
     # Install extensions for PHP 7.x
-    && pecl install apcu \
     # Memcached for 7.3 can currently only be built from master
     && MEMCACHED="`mktemp -d`" \
     && curl -skL https://github.com/php-memcached-dev/php-memcached/archive/master.tar.gz | tar zxf - --strip-components 1 -C $MEMCACHED \
@@ -204,6 +204,7 @@ RUN set -x \
     && docker-php-ext-install $MEMCACHED \
     && rm -rf $MEMCACHED \
     # Install vips (only works with PHP >= 7.0)
+    && pecl install apcu \
     && printf "\n" | pecl install vips \
     && pecl install redis \
     && pecl install mongodb \
@@ -246,7 +247,9 @@ RUN set -x \
         libmemcached-dev \
         yaml-dev \
     && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer2 \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer1 --1 \
+    && ln -sf /usr/local/bin/composer2 /usr/local/bin/composer \
     # Enable php services
     && docker-service enable syslog \
     && docker-service enable cron \
